@@ -3,6 +3,9 @@ import time
 import os
 import dotenv
 
+UUID_SVC_BATTERY = UUID('0000180f-0000-1000-8000-00805f9b34fb')
+UUID_CHAR_BATTERY_LEVEL = UUID('00002a19-0000-1000-8000-00805f9b34fb')
+
 dotenv.load_dotenv()
 
 MAC = os.getenv('MAC')
@@ -31,6 +34,22 @@ class Honeywell(Peripheral):
                 print(f'[{ch.getHandle()}]', '0x'+ format(ch.getHandle(),'02X')  +'   '+str(ch.uuid) +' ' + ch.propertiesToString())
         print('\n')
 
+    def read_battery_level(self) -> int:
+        char: Characteristic = self.get_battery_level_char()
+        if char.supportsRead():
+            return list(char.read())[0]
+        else:
+            raise Exception('Battery level characteristic is not readable')
+
+    def get_battery_level_char(self) -> Characteristic:
+        svc: Service = self.getServiceByUUID(UUID_SVC_BATTERY)
+        chars = svc.getCharacteristics(UUID_CHAR_BATTERY_LEVEL)
+        if len(chars) != 0:
+            return chars[0]
+        else:
+            raise Exception(f'failed to get battery level char, could not find such in {UUID_SVC_BATTERY} service')
+    
+
 class NotificationDelegate(DefaultDelegate):
     '''
     NotificationDelegate is a
@@ -54,6 +73,9 @@ def main():
     print('Connected!')
 
     device.inspect()
-    
+    while True:
+        print('Battery level: ', device.read_battery_level())
+        time.sleep(30)
+
 if __name__ == '__main__':
     main()
