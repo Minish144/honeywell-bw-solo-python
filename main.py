@@ -20,14 +20,14 @@ class Honeywell(Peripheral):
     '''
     def __init__(self, MAC: str):
         super().__init__(MAC)
-    
+
     def inspect(self) -> None:
         '''
         inspect prints available
         services and its characteristics
         '''
         svcs = self.getServices()
-        for svc in svcs: 
+        for svc in svcs:
             print(f'\n       {svc.uuid}       ')
             print('--------------------------------------------------')
             for ch in svc.getCharacteristics():
@@ -48,7 +48,7 @@ class Honeywell(Peripheral):
             return chars[0]
         else:
             raise Exception(f'failed to get battery level char, could not find such in {UUID_SVC_BATTERY} service')
-    
+
 
 class NotificationDelegate(DefaultDelegate):
     '''
