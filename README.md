@@ -26,4 +26,4 @@ python3 main.py
 ```
 
 ## Pairing
-After success connection you will see a message: `You now have a minute to pair your devices using bluetoothctl..` in a console, which means that you should run `bluetoothctl` in a terminal and then do pair your devices like so `pair AA:AA:AA:AA:AA:AA`
+After success connection you will see a message: `You now have a minute to pair your devices using bluetoothctl..` in a console, which means that you should run `bluetoothctl` in a terminal and then pair your devices like so `pair AA:AA:AA:AA:AA:AA`
